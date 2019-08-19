@@ -29,9 +29,9 @@ while True:
     edges = grad.CannyThreshold(100, fgmask)
 
     ####detect lines
-    img_with_lines=line.hough_transform(edges, fgmask)
+    img_with_lines=line.hough_transform(edges, frame)
     
-    cv2.imshow('frame', frame)
+    cv2.imshow('frame', img_with_lines)
 
     ####ending loop formalities
     k = cv2.waitKey(20) & 0xff
