@@ -30,5 +30,5 @@ def CannyThreshold(val, img_blur):
     img_blur = cv2.GaussianBlur(img_blur, (3, 3), 0)
     detected_edges = cv2.Canny(img_blur, low_threshold, low_threshold*ratio, kernel_size)
     mask = detected_edges != 0
-    dst = src * (mask[:,:].astype(src.dtype))
+    # dst = src * (mask[:,:].astype(src.dtype))
     return detected_edges
