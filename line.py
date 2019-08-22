@@ -28,7 +28,7 @@ def houghlineP_transform(edges, img):
     return img
 
 
-def houghmedial(edges, img):
+def houghmedial(edges, img, history, hist_th, th):
     linesP = cv2.HoughLinesP(edges, 1, np.pi / 180, 50, None, 50, 20)
-    img = medial.medial_line(img,linesP,0)
-    return img
+    img, ans= medial.medial_line(img,linesP,history, hist_th, th)
+    return img, ans
