@@ -32,7 +32,7 @@ def findDfromOrigin(m,x1,y1):
     d = abs((a * 0 + b * 0 + c)) / (math.sqrt(a * a + b * b))
     return d
 
-def medial_line(img, linesP, history, hist_th, th):
+def medial_line(img, linesP, historys, hist_th, th):
     track=[]
     if linesP is not None:
         for i in range(0, len(linesP)):
@@ -80,21 +80,26 @@ def medial_line(img, linesP, history, hist_th, th):
     for t in track:
         totalvotes=totalvotes+t[2]
     
-    ans=[0,0,0,0,0,0]
+    
+    ans=[[0,0,0,0,0,0]]
+    print(len(ans))
     newlinehascame = False
     for t in track:
-        if t[2]/totalvotes>0.5:
+        if t[2]/totalvotes>0.3:
             newlinehascame = True
-            if len(history)!=0:
-                if ((history[0]-np.deg2rad(hist_th[0]))<=t[0]<=(history[0]+np.deg2rad(hist_th[0]))) and ((history[1]-hist_th[1])<=t[1]<=(history[1]+hist_th[1])):
-                    t[0]=(t[0]+history[0])/2
-                    t[1]=(t[1]+history[1])/2
-                    t[3]=maxth(t[3],history[2],20)
-                    t[4]=minth(t[4],history[3],20)
-                    t[5]=maxth(t[5],history[4],20)
-                    t[6]=minth(t[6],history[5],20)
+            for history in historys:
+                if len(history)!=0:
+                    if ((history[0]-np.deg2rad(hist_th[0]))<=t[0]<=(history[0]+np.deg2rad(hist_th[0]))) and ((history[1]-hist_th[1])<=t[1]<=(history[1]+hist_th[1])):
+                        t[0]=(t[0]+history[0])/2
+                        t[1]=(t[1]+history[1])/2
+                        t[3]=maxth(t[3],history[2],20)
+                        t[4]=minth(t[4],history[3],20)
+                        t[5]=maxth(t[5],history[4],20)
+                        t[6]=minth(t[6],history[5],20)
+                        break
 
-            ans=[t[0], t[1], t[3], t[4], t[5], t[6]]
+            # ans=[t[0], t[1], t[3], t[4], t[5], t[6]]
+            ans.append([t[0], t[1], t[3], t[4], t[5], t[6]])
             if np.sin(t[0])==0:
                 y1=(t[3]+t[4])/2
                 y2=y1
@@ -113,36 +118,36 @@ def medial_line(img, linesP, history, hist_th, th):
                 x2=(t[1]-y2*cos)/abs(np.sin(t[0]))
             print(str(x1)+" "+str(y1)+" "+str(x2)+" "+str(y2)+" "+"vote:" + str(t[2]))
             cv2.line(img,(int(x1),int(y1)),(int(x2),int(y2)),(255,0, 0), 3, cv2.LINE_AA)
-            
             # print(str(np.rad2deg(t[0]))+" "+str(t[1])+" "+ "vote:" + str(t[2]))
-    if newlinehascame==False and len(history)!=0:
-        t=[0, 0, 0, 0, 0, 0, 0]
-        t[0]=history[0]
-        t[1]=history[1]
-        t[2]=1
-        t[3]=history[2]
-        t[4]=history[3]
-        t[5]=history[4]
-        t[6]=history[5]
+    if newlinehascame==False and len(historys)!=0:
+        for history in historys:
+            t=[0, 0, 0, 0, 0, 0, 0]
+            t[0]=history[0]
+            t[1]=history[1]
+            t[2]=1
+            t[3]=history[2]
+            t[4]=history[3]
+            t[5]=history[4]
+            t[6]=history[5]
 
-        ans=[t[0], t[1], t[3], t[4], t[5], t[6]]
-        if np.sin(t[0])==0:
-            y1=(t[3]+t[4])/2
-            y2=y1
-            x1=t[5]
-            x2=t[6]
-        else:
-            y1=t[3]
-            y2=t[4]
-            cos = 0
-            if np.sin(t[0])>0:
-                cos = -1*np.cos(t[0])
+            ans.append([t[0], t[1], t[3], t[4], t[5], t[6]])
+            if np.sin(t[0])==0:
+                y1=(t[3]+t[4])/2
+                y2=y1
+                x1=t[5]
+                x2=t[6]
             else:
-                cos = np.cos(t[0])
+                y1=t[3]
+                y2=t[4]
+                cos = 0
+                if np.sin(t[0])>0:
+                    cos = -1*np.cos(t[0])
+                else:
+                    cos = np.cos(t[0])
 
-            x1=(t[1]-y1*cos)/abs(np.sin(t[0]))
-            x2=(t[1]-y2*cos)/abs(np.sin(t[0]))
-        print(str(x1)+" "+str(y1)+" "+str(x2)+" "+str(y2)+" "+"vote:" + str(t[2]))
-        cv2.line(img,(int(x1),int(y1)),(int(x2),int(y2)),(255,0, 0), 3, cv2.LINE_AA)
-
+                x1=(t[1]-y1*cos)/abs(np.sin(t[0]))
+                x2=(t[1]-y2*cos)/abs(np.sin(t[0]))
+            print(str(x1)+" "+str(y1)+" "+str(x2)+" "+str(y2)+" "+"vote:" + str(t[2]))
+            cv2.line(img,(int(x1),int(y1)),(int(x2),int(y2)),(255,0, 0), 3, cv2.LINE_AA)
+    ans.pop(0)
     return img, ans

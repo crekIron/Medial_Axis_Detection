@@ -5,7 +5,7 @@ import numpy as np
 import grad 
 import line
 # Path to video file 
-vidObj = cv2.VideoCapture("videos/9.mp4") 
+vidObj = cv2.VideoCapture("videos/1.mp4") 
  
 # fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
 fgbg = cv2.bgsegm.createBackgroundSubtractorCNT(minPixelStability = 10, useHistory = True, maxPixelStability = 10*30, isParallel = True)
@@ -16,8 +16,8 @@ kernel1 = np.ones((3,3),np.uint8)
 kernel2 = np.ones((5,5),np.uint8)
 count = 0
 history = []
-hist_th = [5,80]
-th = [5,80]
+hist_th = [5,100]
+th = [5,100]
 checkh=0
 while count<vidObj.get(cv2.CAP_PROP_FRAME_COUNT): 
     ret, frame = vidObj.read() 
