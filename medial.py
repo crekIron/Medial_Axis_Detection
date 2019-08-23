@@ -85,7 +85,7 @@ def medial_line(img, linesP, historys, hist_th, th):
     print(len(ans))
     newlinehascame = False
     for t in track:
-        if t[2]/totalvotes>0.3:
+        if t[2]/totalvotes>0.4:
             newlinehascame = True
             for history in historys:
                 if len(history)!=0:
