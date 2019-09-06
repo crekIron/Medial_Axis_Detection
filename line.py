@@ -20,7 +20,7 @@ def houghline_transform(edges,img):
     return img
 
 def houghlineP_transform(edges, img):
-    linesP = cv2.HoughLinesP(edges, 1, np.pi / 180, 0, None, 50, 20)
+    linesP = cv2.HoughLinesP(edges, 1, np.pi / 180, 100, None, 50, 20)
     if linesP is not None:
         for i in range(0, len(linesP)):
             l = linesP[i][0]
@@ -28,7 +28,7 @@ def houghlineP_transform(edges, img):
     return img
 
 
-def houghmedial(edges, img, history, hist_th, th):
+def houghmedial(edges, img, history, hist_th, th, relative_vote):
     linesP = cv2.HoughLinesP(edges, 1, np.pi / 180, 50, None, 50, 20)
-    img, ans= medial.medial_line(img,linesP,history, hist_th, th)
+    img, ans= medial.medial_line(img,linesP,history, hist_th, th, relative_vote)
     return img, ans

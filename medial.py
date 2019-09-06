@@ -32,7 +32,7 @@ def findDfromOrigin(m,x1,y1):
     d = abs((a * 0 + b * 0 + c)) / (math.sqrt(a * a + b * b))
     return d
 
-def medial_line(img, linesP, historys, hist_th, th):
+def medial_line(img, linesP, historys, hist_th, th, relative_vote):
     track=[]
     if linesP is not None:
         for i in range(0, len(linesP)):
@@ -85,7 +85,7 @@ def medial_line(img, linesP, historys, hist_th, th):
     print(len(ans))
     newlinehascame = False
     for t in track:
-        if t[2]/totalvotes>0.4:
+        if t[2]/totalvotes>relative_vote:
             newlinehascame = True
             for history in historys:
                 if len(history)!=0:
